@@ -1,0 +1,22 @@
+﻿Build started 9/26/2015 5:49:27 PM.
+     1>Project "C:\Users\John\Documents\OGL Engine\OGL Engine\OGL Engine.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Errors.cpp GLSLProgram.cpp MainGame.cpp SDL_Class.cpp Sprite.cpp main.cpp
+         main.cpp
+     1>c:\users\john\documents\ogl engine\ogl engine\maingame.h(3): fatal error C1083: Cannot open include file: 'SDL\SDL.h': No such file or directory
+         Sprite.cpp
+     1>c:\users\john\documents\ogl engine\ogl engine\sprite.h(2): fatal error C1083: Cannot open include file: 'GL\glew.h': No such file or directory
+         SDL_Class.cpp
+     1>c:\users\john\documents\ogl engine\ogl engine\sdl_class.h(3): fatal error C1083: Cannot open include file: 'SDL\SDL.h': No such file or directory
+         MainGame.cpp
+     1>c:\users\john\documents\ogl engine\ogl engine\maingame.h(3): fatal error C1083: Cannot open include file: 'SDL\SDL.h': No such file or directory
+         GLSLProgram.cpp
+     1>c:\users\john\documents\ogl engine\ogl engine\glslprogram.h(2): fatal error C1083: Cannot open include file: 'GL\glew.h': No such file or directory
+         Errors.cpp
+     1>c:\users\john\documents\ogl engine\ogl engine\errors.cpp(2): fatal error C1083: Cannot open include file: 'SDL\SDL.h': No such file or directory
+         Generating Code...
+     1>Done Building Project "C:\Users\John\Documents\OGL Engine\OGL Engine\OGL Engine.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:01.16
