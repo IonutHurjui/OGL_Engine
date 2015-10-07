@@ -9,8 +9,8 @@ MainGame::MainGame()
 {
 	_window = nullptr;
 	_glContext = nullptr;
-	_screenWidth = 1400;
-	_screenHeight = 800;
+	_screenWidth = 1600;
+	_screenHeight = 1050;
 	_gameState = GameState::PLAY;
 
 };
