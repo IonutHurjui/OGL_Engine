@@ -1,6 +1,7 @@
 #include "Primitives.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
+#include <assimp\Importer.hpp>
 
 
 
@@ -29,6 +30,9 @@ Primitives::Primitives()
 	cameraTarget = vec3(0.0f, 0.0f, 0.0f);
 	up = vec3(0.0f, 1.0f, 0.0f);
 
+	
+
+
 	cubePositions[0] = { glm::vec3(0.0f, 0.0f, 0.0f) };
 	cubePositions[1] = { glm::vec3(2.0f, 0.0f, 0.0f) };
 	cubePositions[2] = { glm::vec3(-2.0f, 0.0f, 0.0f) };
@@ -39,7 +43,7 @@ Primitives::~Primitives()
 {
 }
 
-void Primitives::updateCam(GLfloat deltaTime) {
+void Primitives::updateCam(GLfloat& deltaTime) {
 	deltaTime /= 1000;
 
 	cameraDirection = normalize(cameraPos - cameraTarget);
@@ -47,7 +51,12 @@ void Primitives::updateCam(GLfloat deltaTime) {
 	cameraUp = normalize(cross(cameraDirection, cameraRight));
 
 	_currentKeyStates = SDL_GetKeyboardState(NULL);
-	GLfloat cameraSpeed = 2.f * deltaTime;
+
+	GLfloat cameraSpeed = 2.0f * deltaTime;
+
+	if (_currentKeyStates[SDL_SCANCODE_LSHIFT]) {
+		cameraSpeed = 5.f * deltaTime;
+	}
 	if (_currentKeyStates[SDL_SCANCODE_W]) {
 		cameraPos += cameraSpeed * cameraFront;
 	}
@@ -61,26 +70,57 @@ void Primitives::updateCam(GLfloat deltaTime) {
 		cameraPos += normalize(cross(cameraFront, cameraUp)) * cameraSpeed;
 	}
 	
-	GLint xpos = 0;
-	GLint ypos = 0;
+	
+	
+	
+	
+
+	if (firstInput) {
+		lastX = *p_screenWidth/2;
+		lastY = *p_screenHeight/2;
+		firstInput = false;
+	}
+	
+	
 	SDL_GetMouseState(&xpos, &ypos);
-	GLfloat lastX = static_cast<GLfloat>(*p_screenWidth / 2);
-	GLfloat lastY = static_cast<GLfloat>(*p_screenHeight / 2);
-
+	// mouse position offset between current and last frame
 	GLfloat xOffset = xpos - lastX;
-	GLfloat yOffset = ypos - lastY;
-	lastX = static_cast<GLfloat>(xpos);
-	lastY = static_cast<GLfloat>(ypos);
+	GLfloat yOffset = lastY- ypos; // reversed since y coords are from bottom to top
+	
+	lastX = xpos;
+	lastY = ypos;
+	
 
-	GLfloat sensitivity = 0.05f;
+	GLfloat sensitivity = 0.1f;
 
 	xOffset *= sensitivity;
 	yOffset *= sensitivity;
 
+	yaw += xOffset;
+	pitch += yOffset;
+
+	if (pitch > 80.0f) {
+		pitch = 80.0f;
+	}
+	if (pitch < -80.0f) {
+		pitch = -80.0f;
+	}
+
+	vec3 front;
+
+	front.x = cos(radians(yaw))* cos(radians(pitch));
+	front.y = sin(radians(pitch));
+	front.z = sin(radians(yaw))*cos(radians(pitch));
+	cameraFront = normalize(front);
+
 
 }
 
-void Primitives::drawShape(GLfloat deltaTime){
+
+
+
+
+void Primitives::drawShape(GLfloat& deltaTime){
 	
 	GLfloat radius = 6.0f;
 	GLfloat camX = sin(size) * radius;
@@ -95,9 +135,10 @@ void Primitives::drawShape(GLfloat deltaTime){
 	
 	_myShader.Use();
 
-	view = lookAt(vec3(cameraPos), 
-				vec3(cameraPos+ cameraFront),
-				vec3(cameraUp));
+	view = lookAt(cameraPos,
+				cameraPos+ cameraFront,
+				cameraUp);
+	
 	projection = perspective(radians(75.0f), *p_ratio, 0.1f, 200.0f);
 
 	modelLoc = glGetUniformLocation(_myShader.getSP(), "model");

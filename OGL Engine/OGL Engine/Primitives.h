@@ -9,6 +9,7 @@
 #include <iostream>
 #include <fstream>
 #include <chrono>
+#include <thread>
 
 
 #include "Shader.h"
@@ -23,11 +24,15 @@ public:
 	void createPrimitive();
 	void createShaders();
 
-	void drawShape(GLfloat deltaTime);
+	void drawShape(GLfloat& deltaTime);
 	void deleteShape();
 
 	void loadImage();
-	void updateCam(GLfloat deltaTime);
+	void updateCam(GLfloat& deltaTime);
+
+
+	GLint xpos = 0;
+	GLint ypos = 0;
 
 private:
 	Shader _myShader;
@@ -55,10 +60,25 @@ private:
 	glm::mat4 projection;
 
 
+
+
 private:
 	//// CAMERA /////
+	
 	glm::vec3 cameraFront, cameraPos, cameraTarget, 
 			  cameraDirection, up, cameraRight, cameraUp;
+
+	GLfloat yaw = -90.0f; // -90.0 since yaw 0.0 results in a direction pointing right
+	GLfloat pitch = 0.0f;
+
+
+	GLfloat lastX = 0.0f;
+	GLfloat lastY = 0.0f;
+
+	bool firstInput = true;
+
+	
+	
 
 private:
 	/// DELTA TIME ///

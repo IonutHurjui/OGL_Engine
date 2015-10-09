@@ -9,8 +9,8 @@ MainGame::MainGame()
 {
 	_window = nullptr;
 	_glContext = nullptr;
-	_screenWidth = 1600;
-	_screenHeight = 1050;
+	_screenWidth = 1400;
+	_screenHeight = 800;
 	_gameState = GameState::PLAY;
 
 };
@@ -52,7 +52,7 @@ void MainGame::gameLoop(){
 
 
 		//// FPS LIMITER ////
-		SDL_Delay(15);
+		SDL_Delay(1000/60);
 	}
 	triangle.deleteShape();
 
@@ -82,15 +82,19 @@ void MainGame::drawGame(GLfloat deltaTime){
 
 void MainGame::processInput(){
 	SDL_Event evnt;
+	SDL_PumpEvents();
 	while (SDL_PollEvent(&evnt)){
 		switch (evnt.type)
 		{
 		case  SDL_QUIT:
 			_gameState = GameState::EXIT;
 			break;
+
 		default:
 			break;
 		}
+
+		
 	}
 };
 
@@ -114,6 +118,7 @@ void MainGame::handleInput(GLfloat deltaTime){
 	if (_currentKeyStates[SDL_SCANCODE_F7]){
 		glDisable(GL_MULTISAMPLE);
 	}
+
 	
 }
 
@@ -134,13 +139,14 @@ void MainGame::initSystem(){
 	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4 );
 	
 	//// CREATE A WINDOW ////
-	_window = SDL_CreateWindow("OpenGL 4.5.0 Renderer/64-bit", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _screenWidth, _screenHeight, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_RENDERER_PRESENTVSYNC);
+	_window = SDL_CreateWindow("OpenGL 4.5.0 Renderer/64-bit", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, _screenWidth, _screenHeight, SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN); //SDL_RENDERER_PRESENTVSYNC
 	if (_window == nullptr){
 		fatalError("SDL Window could not be created.");
 	}
-
+	//GRAB THE MOUSE INPUT AND DISABLE CURSOR //
 	SDL_SetWindowGrab(_window, SDL_TRUE);
 	SDL_ShowCursor(SDL_DISABLE);
+
 	//// CREATE THE CONTEXT ////
 	_glContext = SDL_GL_CreateContext(_window);
 	if (_glContext == nullptr){
